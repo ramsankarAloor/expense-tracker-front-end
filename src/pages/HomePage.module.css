@@ -1,0 +1,44 @@
+.for-navabar{
+    background-color: beige;
+    border-bottom: 1px solid black;
+}
+.flex{
+    display: flex;
+    align-items: center;
+}
+.blue-link{
+    color: blue;
+    background-color: transparent;
+    border: none;
+}
+.for-card{
+    margin-top: 2rem;
+    padding: 0 1rem;
+    padding-bottom: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.div-under-card{
+    display: flex;
+    width: 30%;
+}
+.custom-input-wrapper {
+    margin-top: 1rem;
+    width: 49%;
+    height: 3.6rem;
+  }
+
+.custom-button-wrapper{
+    margin-top: 0.5rem;
+    width: 49%;
+    height: 3.6rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+}
+.button {
+    height: 2.5rem;
+}

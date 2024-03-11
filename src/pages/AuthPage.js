@@ -71,6 +71,7 @@ const AuthPage = () => {
 
       try {
         const { data } = await axios.post(loginUrl, reqBody);
+        console.log(data)
         authCtx.onLogin(data.idToken);
         history.replace("/home");
       } catch (error) {
