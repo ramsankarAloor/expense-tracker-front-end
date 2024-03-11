@@ -11,14 +11,17 @@
     background-color: transparent;
     border: none;
 }
+.form-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .for-card{
+    width: 50%;
     margin-top: 2rem;
     padding: 0 1rem;
+    padding-top: 1rem;
     padding-bottom: 0.5rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-wrap: wrap;
 }
 .div-under-card{
     display: flex;
@@ -32,7 +35,7 @@
 
 .custom-button-wrapper{
     margin-top: 0.5rem;
-    width: 49%;
+    width: 100%;
     height: 3.6rem;
     display: flex;
     justify-content: flex-end;
