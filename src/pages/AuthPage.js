@@ -1,8 +1,9 @@
 import { Button, Card } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import styles from "./AuthPage.module.css";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import axios from "axios";
+import AuthContext from "../store/auth-context";
 
 const signupUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_FB_KEY}`;
 const loginUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FB_KEY}`;
@@ -12,6 +13,8 @@ const AuthPage = () => {
   const emailRef = useRef();
   const passRef = useRef();
   const conPassRef = useRef();
+
+  const authCtx = useContext(AuthContext)
 
   const [isLogin, setIsLogin] = useState(true);
 
@@ -42,7 +45,7 @@ const AuthPage = () => {
 
       try {
         const { data } = await axios.post(signupUrl, reqBody);
-        localStorage.setItem("token", data.idToken);
+        authCtx.onLogin(data.idToken);
         history.replace("/home");
       } catch (error) {
         if (
@@ -68,7 +71,7 @@ const AuthPage = () => {
 
       try {
         const { data } = await axios.post(loginUrl, reqBody);
-        localStorage.setItem("token", data.idToken);
+        authCtx.onLogin(data.idToken);
         history.replace("/home");
       } catch (error) {
         if (
