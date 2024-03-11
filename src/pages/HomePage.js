@@ -30,13 +30,13 @@ const HomePage = () => {
             <div className={classes["custom-input-wrapper"]}>
               <div className="form-floating">
                 <FormControl placeholder="name"></FormControl>
-                <label htmlFor="name">Name</label>
+                <label htmlFor="name">Full Name</label>
               </div>
             </div>
             <div className={classes["custom-input-wrapper"]}>
               <div className="form-floating">
                 <FormControl placeholder="name"></FormControl>
-                <label htmlFor="name">Photo Url</label>
+                <label htmlFor="name">Profile Photo URL</label>
               </div>
             </div>
             <div className={classes["custom-input-wrapper"]}></div>

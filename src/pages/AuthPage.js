@@ -44,9 +44,8 @@ const AuthPage = () => {
       };
 
       try {
-        const { data } = await axios.post(signupUrl, reqBody);
-        authCtx.onLogin(data.idToken);
-        history.replace("/home");
+        await axios.post(signupUrl, reqBody);
+        setIsLogin(true)
       } catch (error) {
         if (
           error.response &&
