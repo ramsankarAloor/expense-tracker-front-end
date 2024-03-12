@@ -22,6 +22,10 @@ const AuthPage = () => {
     setIsLogin((prevState) => !prevState);
   }
 
+  function forgotPasswordHandler(){
+    history.push("/forgot-password")
+  }
+
   async function sendAuthApi() {
     const enteredEmail = emailRef.current.value;
     const enteredPass = passRef.current.value;
@@ -130,7 +134,7 @@ const AuthPage = () => {
             <label htmlFor="confirm-password">Confirm password</label>
           </div>
         )}
-
+        <button className={styles["blue-link"]} onClick={forgotPasswordHandler}>Forgot password?</button>
         <Button className={styles["s-button"]} onClick={sendAuthApi}>
           {isLogin ? "Login" : "Signup"}
         </Button>
