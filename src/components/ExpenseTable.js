@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import { Container } from "react-bootstrap";
 import ExpenseContext from "../store/expense-context";
-import classes from './ExpenseTable.module.css'
+import classes from "./ExpenseTable.module.css";
 
 const ExpenseTable = () => {
   const expCtx = useContext(ExpenseContext);
-
-  const expenseList = expCtx.expenses.map((exp, index) => {
+  const expensesObj = expCtx.expenses;
+  const expenseList = Object.values(expensesObj).map((exp, index) => {
     return (
       <tr key={index}>
         <td>{exp.amount}</td>
@@ -16,7 +16,7 @@ const ExpenseTable = () => {
     );
   });
   return (
-    <Container className={classes['for-container']}>
+    <Container className={classes["for-container"]}>
       <table className="table">
         <thead>
           <tr>
@@ -25,9 +25,7 @@ const ExpenseTable = () => {
             <th scope="col">Category</th>
           </tr>
         </thead>
-        <tbody>
-          {expenseList}
-        </tbody>
+        <tbody>{expenseList}</tbody>
       </table>
     </Container>
   );
