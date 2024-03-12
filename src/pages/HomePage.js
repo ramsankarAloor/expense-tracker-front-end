@@ -8,11 +8,12 @@ import axios from "axios";
 
 const updateProfileUrl = `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${process.env.REACT_APP_FB_KEY}`;
 const userDataUrl = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${process.env.REACT_APP_FB_KEY}`;
+const verifyEmailUrl = `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${process.env.REACT_APP_FB_KEY}`;
 
 const HomePage = () => {
   const authCtx = useContext(AuthContext);
   const [updateOpen, setUpdateOpen] = useState(false);
-  const [updatedUser, setUpdatedUser] = useState(true);
+  const [updatedUser, setUpdatedUser] = useState(false);
   const [fullname, setFullname] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
 
@@ -43,11 +44,22 @@ const HomePage = () => {
     console.log(response);
   }
 
+  async function onVerifyEmail() {
+    const reqObj = { requestType: "VERIFY_EMAIL", idToken: authCtx.token };
+    const response = await axios.post(verifyEmailUrl, reqObj);
+    console.log(response);
+  }
+
   return (
     <>
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
           <Navbar.Brand>Welcome to Expense tracker!!</Navbar.Brand>
+          <span>
+            <button className={classes["blue-link"]} onClick={onVerifyEmail}>
+              Verify Email !!
+            </button>
+          </span>
           {!updatedUser && (
             <span className={classes.flex}>
               Your profile is incomplete.
