@@ -1,0 +1,10 @@
+.for-container{
+    display: flex;
+    height: 90%;
+    width: 100%;
+}
+.half{
+    display: flex;
+    width: 50%;
+    height: 100%;
+}

@@ -6,13 +6,14 @@ import { Card, FormControl, Button } from "react-bootstrap";
 import AuthContext from "../store/auth-context";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import ExpenseLayout from "../components/ExpenseLayout";
 
 const updateProfileUrl = `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${process.env.REACT_APP_FB_KEY}`;
 const userDataUrl = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${process.env.REACT_APP_FB_KEY}`;
 const verifyEmailUrl = `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${process.env.REACT_APP_FB_KEY}`;
 
 const HomePage = () => {
-  const history = useHistory()
+  const history = useHistory();
   const authCtx = useContext(AuthContext);
   const [updateOpen, setUpdateOpen] = useState(false);
   const [fullname, setFullname] = useState("");
@@ -52,14 +53,14 @@ const HomePage = () => {
     console.log(response);
   }
 
-  function logoutHandler(){
-    authCtx.onLogout()
-    history.replace("/auth")
+  function logoutHandler() {
+    authCtx.onLogout();
+    history.replace("/auth");
   }
 
   return (
-    <>
-      <Navbar expand="lg" className="bg-body-tertiary">
+    <div className={classes.full}>
+      <Navbar expand="lg" bg="light" className={classes["for-navbar"]}>
         <Container>
           <Navbar.Brand>Expense tracker</Navbar.Brand>
           {!authCtx.verifiedUser && (
@@ -100,9 +101,9 @@ const HomePage = () => {
           >
             Logout
           </Button>
-
         </Container>
       </Navbar>
+
       {updateOpen && (
         <Container className={classes["form-container"]}>
           <Card className={classes["for-card"]}>
@@ -143,7 +144,9 @@ const HomePage = () => {
           </Card>
         </Container>
       )}
-    </>
+
+      <ExpenseLayout />
+    </div>
   );
 };
 

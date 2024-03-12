@@ -1,6 +1,9 @@
-.for-navabar{
-    background-color: beige;
-    border-bottom: 1px solid black;
+.for-navbar{
+   height: 10%;
+}
+.full{
+    width: 100vw;
+    height: 100vh;
 }
 .flex{
     display: flex;

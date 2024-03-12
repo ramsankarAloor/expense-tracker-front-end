@@ -1,0 +1,18 @@
+.for-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.for-card {
+  width: 80%;
+  padding: 1.5rem;
+}
+.for-card h3 {
+  text-align: center;
+}
+.s-button {
+  height: 3rem;
+  font-size: larger;
+  font-weight: 500;
+}
