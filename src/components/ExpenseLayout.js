@@ -1,20 +1,20 @@
 import ExpenseForm from "./ExpenseForm";
 import ExpenseTable from "./ExpenseTable";
 import classes from "./ExpenseLayout.module.css";
-import { ExpenseProvider } from "../store/expense-context";
+import { useState } from "react";
 
 const ExpenseLayout = () => {
+  const [expenses, setExpenses] = useState({});
+
   return (
-    <ExpenseProvider>
       <div className={classes["for-container"]}>
         <div className={classes.half}>
-          <ExpenseForm />
+          <ExpenseForm expenses={expenses} setExpenses={setExpenses}/>
         </div>
         <div className={classes.half}>
-          <ExpenseTable />
+          <ExpenseTable expenses={expenses} setExpenses={setExpenses}/>
         </div>
       </div>
-    </ExpenseProvider>
   );
 };
 

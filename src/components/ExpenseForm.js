@@ -1,13 +1,11 @@
 import { Card, Container, Button } from "react-bootstrap";
 import classes from "./ExpenseForm.module.css";
-import { useContext, useRef } from "react";
-import ExpenseContext from "../store/expense-context";
+import { useRef } from "react";
 import axios from "axios";
 
 const expensesUrl = `https://expense-tracker-front-en-3cc1e-default-rtdb.firebaseio.com/expenses.json`;
 
-const ExpenseForm = () => {
-  const expCtx = useContext(ExpenseContext);
+const ExpenseForm = (props) => {
   const amountRef = useRef();
   const descRef = useRef();
   const catRef = useRef();
@@ -24,12 +22,13 @@ const ExpenseForm = () => {
     const obj = { amount, description, category };
 
     try {
-      await axios.post(expensesUrl, obj);
+      const { data } = await axios.post(expensesUrl, obj);
+      props.setExpenses((prevExpenses)=> {
+        return { ...prevExpenses, [data.name] : obj}
+      })
     } catch (error) {
-      console.log("Error : ", error.message);
+      console.error("Error : ", error.message);
     }
-
-    expCtx.addExpense(obj);
 
     amountRef.current.value = "";
     descRef.current.value = "";
