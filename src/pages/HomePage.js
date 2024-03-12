@@ -13,7 +13,6 @@ const verifyEmailUrl = `https://identitytoolkit.googleapis.com/v1/accounts:sendO
 const HomePage = () => {
   const authCtx = useContext(AuthContext);
   const [updateOpen, setUpdateOpen] = useState(false);
-  const [updatedUser, setUpdatedUser] = useState(false);
   const [fullname, setFullname] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
 
@@ -23,13 +22,14 @@ const HomePage = () => {
 
   async function getUserInfo() {
     const { data } = await axios.post(userDataUrl, { idToken: authCtx.token });
-    if (data.users.length > 0) {
-      setUpdatedUser(true);
-    } else {
-      setUpdatedUser(false);
-    }
-    setFullname(data.users[0].displayName);
-    setPhotoUrl(data.users[0].photoUrl);
+    if(data.users[0].emailVerified){
+      authCtx.afterVerification()
+    };
+    if (data.users[0].displayName) {
+      authCtx.onUpdateUser(true);
+      setFullname(data.users[0].displayName);
+      setPhotoUrl(data.users[0].photoUrl);
+    } 
   }
 
   async function sendUpdateApi() {
@@ -54,13 +54,14 @@ const HomePage = () => {
     <>
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
-          <Navbar.Brand>Welcome to Expense tracker!!</Navbar.Brand>
-          <span>
+          <Navbar.Brand>Expense tracker</Navbar.Brand>
+          {!authCtx.verifiedUser && <span>
             <button className={classes["blue-link"]} onClick={onVerifyEmail}>
               Verify Email !!
             </button>
-          </span>
-          {!updatedUser && (
+          </span>}
+          
+          {!authCtx.updatedUser && (
             <span className={classes.flex}>
               Your profile is incomplete.
               <button
@@ -72,7 +73,8 @@ const HomePage = () => {
               </button>
             </span>
           )}
-          {updatedUser && (
+
+          {authCtx.updatedUser && (
             <Button
               variant="outline-secondary"
               className={classes.button}
@@ -81,6 +83,7 @@ const HomePage = () => {
               Edit profile
             </Button>
           )}
+          
         </Container>
       </Navbar>
       {updateOpen && (

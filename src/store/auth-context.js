@@ -1,35 +1,56 @@
 import React, { useState } from "react";
 
 const AuthContext = React.createContext({
-    token: null,
-    isLoggedIn: false,
-    onLogin: (token)=>{},
-    onLogout: ()=>{}
-})
+  token: null,
+  isLoggedIn: false,
+  updatedUser: false,
+  verifiedUser: false,
+  onLogin: (token) => {},
+  onLogout: () => {},
+  onUpdateUser: () => {},
+  afterVerification: ()=>{}
+});
 
-export const AuthProvider=props=>{
-    const t = localStorage.getItem('token') 
-    const [token, setToken] = useState(t)
+export const AuthProvider = (props) => {
+  const t = localStorage.getItem("token");
+  const [token, setToken] = useState(t);
+  const [updatedUser, setUpdatedUser] = useState(false);
+  const [verifiedUser, setVerifiedUser] = useState(false);
 
-    function onLogin(t){
-        setToken(t)
-        localStorage.setItem('token', t)
-    }
+  function onUpdateUser() {
+    setUpdatedUser(true);
+  }
 
-    function onLogout(){
-        setToken(null)
-        localStorage.removeItem('token')
-    }
+  function onLogin(t) {
+    setToken(t);
+    localStorage.setItem("token", t);
+  }
 
-    const authContext = {
-        token, isLoggedIn : !!token,
-        onLogin, onLogout
-    }
+  function onLogout() {
+    setToken(null);
+    localStorage.removeItem("token");
+  }
 
-    return (
-        <AuthContext.Provider value={authContext}>{props.children}</AuthContext.Provider>
-    )
-}
+  function afterVerification(){
+    setVerifiedUser(true)
+  }
 
+  const authContext = {
+    token,
+    isLoggedIn: !!token,
+    updatedUser,
+    verifiedUser,
+    onLogin,
+    onLogout,
+    onUpdateUser,
+    afterVerification
+  };
 
-export default AuthContext
+  return (
+    <AuthContext.Provider value={authContext}>
+      {props.children}
+    </AuthContext.Provider>
+  );
+};
+
+export default AuthContext;
