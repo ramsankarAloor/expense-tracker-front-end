@@ -1,10 +1,32 @@
 import { Card, Container, Button } from "react-bootstrap";
 import classes from "./ExpenseForm.module.css";
+import { useContext, useRef } from "react";
+import ExpenseContext from "../store/expense-context";
 
 const ExpenseForm = () => {
+  const expCtx = useContext(ExpenseContext);
+  const amountRef = useRef();
+  const descRef = useRef();
+  const catRef = useRef();
 
-    function onAddExpense(){}
-    
+  function onAddExpense() {
+    const amount = amountRef.current.value;
+    const description = descRef.current.value;
+    const category = catRef.current.value;
+
+    if (!amount) {
+      return;
+    }
+
+    const obj = { amount, description, category };
+
+    expCtx.addExpense(obj);
+
+    amountRef.current.value = "";
+    descRef.current.value = "";
+    catRef.current.value = "food";
+  }
+
   return (
     <Container className={classes["for-container"]}>
       <Card className={classes["for-card"]}>
@@ -20,6 +42,7 @@ const ExpenseForm = () => {
               required
               placeholder="amount"
               id="amount"
+              ref={amountRef}
             ></input>
             <label htmlFor="amount">Amount</label>
           </div>
@@ -30,11 +53,12 @@ const ExpenseForm = () => {
             type="text"
             placeholder="desc"
             id="desc"
+            ref={descRef}
           ></input>
           <label htmlFor="desc">Description</label>
         </div>
         <div className="form-floating mb-3">
-          <select className="form-select" id="category">
+          <select className="form-select" id="category" ref={catRef}>
             <option value="food">Food</option>
             <option value="fuel">Fuel</option>
             <option value="entertainment">Entertainment</option>
