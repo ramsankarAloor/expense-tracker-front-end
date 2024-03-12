@@ -1,7 +1,7 @@
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import classes from "./HomePage.module.css";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useCallback } from "react";
 import { Card, FormControl, Button } from "react-bootstrap";
 import AuthContext from "../store/auth-context";
 import axios from "axios";
@@ -19,21 +19,25 @@ const HomePage = () => {
   const [fullname, setFullname] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
 
-  useEffect(() => {
-    getUserInfo();
-  }, []);
-
-  async function getUserInfo() {
+  const getUserInfo = useCallback(async () => {
     const { data } = await axios.post(userDataUrl, { idToken: authCtx.token });
     if (data.users[0].emailVerified) {
-      authCtx.afterVerification();
+      authCtx.makeVerification(true);
+    }else{
+      authCtx.makeVerification(false)
     }
     if (data.users[0].displayName) {
       authCtx.onUpdateUser(true);
       setFullname(data.users[0].displayName);
       setPhotoUrl(data.users[0].photoUrl);
+    }else{
+      authCtx.onUpdateUser(false)
     }
-  }
+  }, [authCtx.token, authCtx.afterVerification, authCtx.onUpdateUser])
+
+  useEffect(() => {
+    getUserInfo();
+  }, [getUserInfo]);
 
   async function sendUpdateApi() {
     const obj = {
@@ -44,13 +48,11 @@ const HomePage = () => {
     };
 
     const response = await axios.post(updateProfileUrl, obj);
-    console.log(response);
   }
 
   async function onVerifyEmail() {
     const reqObj = { requestType: "VERIFY_EMAIL", idToken: authCtx.token };
     const response = await axios.post(verifyEmailUrl, reqObj);
-    console.log(response);
   }
 
   function logoutHandler() {
@@ -63,7 +65,7 @@ const HomePage = () => {
       <Navbar expand="lg" bg="light" className={classes["for-navbar"]}>
         <Container>
           <Navbar.Brand>Expense tracker</Navbar.Brand>
-          {!authCtx.verifiedUser && (
+          {authCtx.verifiedUser===false && (
             <span>
               <button className={classes["blue-link"]} onClick={onVerifyEmail}>
                 Verify Email !!
@@ -71,7 +73,7 @@ const HomePage = () => {
             </span>
           )}
 
-          {!authCtx.updatedUser && (
+          {authCtx.updatedUser===false && (
             <span className={classes.flex}>
               Your profile is incomplete.
               <button
@@ -84,7 +86,7 @@ const HomePage = () => {
             </span>
           )}
 
-          {authCtx.updatedUser && (
+          {authCtx.updatedUser===true && (
             <Button
               variant="outline-secondary"
               className={classes.button}

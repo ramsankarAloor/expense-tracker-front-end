@@ -8,17 +8,17 @@ const AuthContext = React.createContext({
   onLogin: (token) => {},
   onLogout: () => {},
   onUpdateUser: () => {},
-  afterVerification: ()=>{}
+  makeVerification: ()=>{}
 });
 
 export const AuthProvider = (props) => {
   const t = localStorage.getItem("token");
   const [token, setToken] = useState(t);
-  const [updatedUser, setUpdatedUser] = useState(false);
-  const [verifiedUser, setVerifiedUser] = useState(false);
+  const [updatedUser, setUpdatedUser] = useState();
+  const [verifiedUser, setVerifiedUser] = useState();
 
-  function onUpdateUser() {
-    setUpdatedUser(true);
+  function onUpdateUser(t) {
+    setUpdatedUser(t);
   }
 
   function onLogin(t) {
@@ -31,8 +31,8 @@ export const AuthProvider = (props) => {
     localStorage.removeItem("token");
   }
 
-  function afterVerification(){
-    setVerifiedUser(true)
+  function makeVerification(t){
+    setVerifiedUser(t)
   }
 
   const authContext = {
@@ -43,7 +43,7 @@ export const AuthProvider = (props) => {
     onLogin,
     onLogout,
     onUpdateUser,
-    afterVerification
+    makeVerification
   };
 
   return (

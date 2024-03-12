@@ -32,7 +32,7 @@ const ExpenseForm = () => {
       <Card className={classes["for-card"]}>
         <h3>Add Expense</h3>
         <div className="mb-3 input-group">
-          <span class="input-group-text">&#8377;</span>
+          <span className="input-group-text">&#8377;</span>
           <div className="form-floating">
             <input
               className="form-control"
