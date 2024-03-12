@@ -19,7 +19,7 @@ const HomePage = () => {
   const [fullname, setFullname] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
 
-  const getUserInfo = useCallback(async () => {
+  async function getUserInfo() {
     const { data } = await axios.post(userDataUrl, { idToken: authCtx.token });
     if (data.users[0].emailVerified) {
       authCtx.makeVerification(true);
@@ -32,12 +32,11 @@ const HomePage = () => {
       setPhotoUrl(data.users[0].photoUrl);
     }else{
       authCtx.onUpdateUser(false)
-    }
-  }, [authCtx.token, authCtx.afterVerification, authCtx.onUpdateUser])
+    }}
 
   useEffect(() => {
     getUserInfo();
-  }, [getUserInfo]);
+  }, []);
 
   async function sendUpdateApi() {
     const obj = {
@@ -47,12 +46,16 @@ const HomePage = () => {
       returnSecureToken: true,
     };
 
-    const response = await axios.post(updateProfileUrl, obj);
+    await axios.post(updateProfileUrl, obj);
+    authCtx.onUpdateUser(true)
+    console.log('=> ', authCtx.updatedUser)
+    setUpdateOpen(false)
   }
 
   async function onVerifyEmail() {
     const reqObj = { requestType: "VERIFY_EMAIL", idToken: authCtx.token };
-    const response = await axios.post(verifyEmailUrl, reqObj);
+    await axios.post(verifyEmailUrl, reqObj);
+    authCtx.makeVerification(true)
   }
 
   function logoutHandler() {
