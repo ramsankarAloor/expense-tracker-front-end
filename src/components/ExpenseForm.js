@@ -1,38 +1,38 @@
 import { Card, Container, Button } from "react-bootstrap";
 import classes from "./ExpenseForm.module.css";
-import { useRef } from "react";
 import axios from "axios";
 
 const expensesUrl = `https://expense-tracker-front-en-3cc1e-default-rtdb.firebaseio.com/expenses.json`;
 
 const ExpenseForm = (props) => {
-  const amountRef = useRef();
-  const descRef = useRef();
-  const catRef = useRef();
+  const amount = props.amount
+  const setAmount = props.setAmount
+  const desc = props.desc
+  const setDesc = props.setDesc
+  const cat = props.cat
+  const setCat = props.setCat
 
   async function onAddExpense() {
-    const amount = amountRef.current.value;
-    const description = descRef.current.value;
-    const category = catRef.current.value;
-
     if (!amount) {
       return;
     }
 
-    const obj = { amount, description, category };
+    const obj = { amount: +amount, description:desc, category:cat };
+
+    console.log("obj => ", obj)
 
     try {
       const { data } = await axios.post(expensesUrl, obj);
-      props.setExpenses((prevExpenses)=> {
-        return { ...prevExpenses, [data.name] : obj}
-      })
+      props.setExpenses((prevExpenses) => {
+        return { ...prevExpenses, [data.name]: obj };
+      });
+
+      setAmount("");
+      setDesc("");
+      setCat("food");
     } catch (error) {
       console.error("Error : ", error.message);
     }
-
-    amountRef.current.value = "";
-    descRef.current.value = "";
-    catRef.current.value = "food";
   }
 
   return (
@@ -50,7 +50,8 @@ const ExpenseForm = (props) => {
               required
               placeholder="amount"
               id="amount"
-              ref={amountRef}
+              onChange={(e) => setAmount(e.target.value)}
+              value={amount}
             ></input>
             <label htmlFor="amount">Amount</label>
           </div>
@@ -61,12 +62,18 @@ const ExpenseForm = (props) => {
             type="text"
             placeholder="desc"
             id="desc"
-            ref={descRef}
+            onChange={(e) => setDesc(e.target.value)}
+            value={desc}
           ></input>
           <label htmlFor="desc">Description</label>
         </div>
         <div className="form-floating mb-3">
-          <select className="form-select" id="category" ref={catRef}>
+          <select
+            className="form-select"
+            id="category"
+            onChange={(e) => setCat(e.target.value)}
+            value={cat}
+          >
             <option value="food">Food</option>
             <option value="fuel">Fuel</option>
             <option value="entertainment">Entertainment</option>

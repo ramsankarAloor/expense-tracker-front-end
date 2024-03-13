@@ -32,11 +32,20 @@ const ExpenseTable = (props) => {
       delete copyExp[key];
       props.setExpenses(copyExp);
     }
+
+    async function editExpenseHandler(){
+      props.populateForEdit(props.expenses[key])
+    }
     return (
       <tr key={index}>
         <td>{props.expenses[key].amount}</td>
         <td>{props.expenses[key].description}</td>
         <td>{props.expenses[key].category}</td>
+        <td>
+          <Button variant="outline-primary" onClick={editExpenseHandler}>
+            Edit
+          </Button>
+        </td>
         <td>
           <Button variant="danger" onClick={deleteExpenseHandler}>
             Delete
@@ -54,6 +63,7 @@ const ExpenseTable = (props) => {
             <th scope="col">Amount</th>
             <th scope="col">Description</th>
             <th scope="col">Category</th>
+            <th scope="col"></th>
             <th scope="col"></th>
           </tr>
         </thead>
