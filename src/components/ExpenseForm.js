@@ -5,22 +5,18 @@ import axios from "axios";
 const expensesUrl = `https://expense-tracker-front-en-3cc1e-default-rtdb.firebaseio.com/expenses.json`;
 
 const ExpenseForm = (props) => {
-  const amount = props.amount
-  const setAmount = props.setAmount
-  const desc = props.desc
-  const setDesc = props.setDesc
-  const cat = props.cat
-  const setCat = props.setCat
+  const amount = props.amount;
+  const setAmount = props.setAmount;
+  const desc = props.desc;
+  const setDesc = props.setDesc;
+  const cat = props.cat;
+  const setCat = props.setCat;
 
   async function onAddExpense() {
     if (!amount) {
       return;
     }
-
-    const obj = { amount: +amount, description:desc, category:cat };
-
-    console.log("obj => ", obj)
-
+    const obj = { amount: +amount, description: desc, category: cat };
     try {
       const { data } = await axios.post(expensesUrl, obj);
       props.setExpenses((prevExpenses) => {
@@ -33,6 +29,13 @@ const ExpenseForm = (props) => {
     } catch (error) {
       console.error("Error : ", error.message);
     }
+  }
+
+  function onCancelEdit() {
+    props.setEditing(false);
+    setAmount("");
+    setDesc("");
+    setCat("food");
   }
 
   return (
@@ -81,9 +84,24 @@ const ExpenseForm = (props) => {
           </select>
           <label htmlFor="category">Category</label>
         </div>
-        <Button className={classes["s-button"]} onClick={onAddExpense}>
-          Add Expense
-        </Button>
+        {!props.editing ? (
+          <Button className={classes["s-button"]} onClick={onAddExpense}>
+            Add Expense
+          </Button>
+        ) : (
+          <>
+            <Button className={classes["s-button"]} onClick={props.editExpense}>
+              Edit Expense
+            </Button>
+            <Button
+              variant="outline-secondary"
+              className={`${classes["cancel-button"]} ${classes["s-button"]}`}
+              onClick={onCancelEdit}
+            >
+              Cancel Edit
+            </Button>
+          </>
+        )}
       </Card>
     </Container>
   );

@@ -34,7 +34,7 @@ const ExpenseTable = (props) => {
     }
 
     async function editExpenseHandler(){
-      props.populateForEdit(props.expenses[key])
+      props.populateForEdit(props.expenses[key], key)
     }
     return (
       <tr key={index}>
