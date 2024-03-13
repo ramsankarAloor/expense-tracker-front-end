@@ -24,7 +24,7 @@ const ExpenseLayout = () => {
   }
 
   async function editExpense() {
-    const obj = { amount, description: desc, category: cat };
+    const obj = { amount: +amount, description: desc, category: cat };
     try {
       await axios.put(`${editUrlBase}/${keyId}.json`, obj);
 
