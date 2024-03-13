@@ -18,20 +18,22 @@ const HomePage = () => {
   const [updateOpen, setUpdateOpen] = useState(false);
   const [fullname, setFullname] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
+  const [verified, setVerified] = useState(false);
+  const [updatedUser, setUpdatedUser] = useState(false);
 
   async function getUserInfo() {
     const { data } = await axios.post(userDataUrl, { idToken: authCtx.token });
     if (data.users[0].emailVerified) {
-      authCtx.makeVerification(true);
+      setVerified(true);
     }else{
-      authCtx.makeVerification(false)
+      setVerified(false)
     }
     if (data.users[0].displayName) {
-      authCtx.onUpdateUser(true);
+      setUpdatedUser(true);
       setFullname(data.users[0].displayName);
       setPhotoUrl(data.users[0].photoUrl);
     }else{
-      authCtx.onUpdateUser(false)
+      setUpdatedUser(false)
     }}
 
   useEffect(() => {
@@ -47,15 +49,15 @@ const HomePage = () => {
     };
 
     await axios.post(updateProfileUrl, obj);
-    authCtx.onUpdateUser(true)
-    console.log('=> ', authCtx.updatedUser)
+    setUpdatedUser(true)
+    console.log('=> ', updatedUser)
     setUpdateOpen(false)
   }
 
   async function onVerifyEmail() {
     const reqObj = { requestType: "VERIFY_EMAIL", idToken: authCtx.token };
     await axios.post(verifyEmailUrl, reqObj);
-    authCtx.makeVerification(true)
+    setVerified(true)
   }
 
   function logoutHandler() {
@@ -68,7 +70,7 @@ const HomePage = () => {
       <Navbar expand="lg" bg="light" className={classes["for-navbar"]}>
         <Container>
           <Navbar.Brand>Expense tracker</Navbar.Brand>
-          {authCtx.verifiedUser===false && (
+          {verified===false && (
             <span>
               <button className={classes["blue-link"]} onClick={onVerifyEmail}>
                 Verify Email !!
@@ -76,7 +78,7 @@ const HomePage = () => {
             </span>
           )}
 
-          {authCtx.updatedUser===false && (
+          {updatedUser===false && (
             <span className={classes.flex}>
               Your profile is incomplete.
               <button
@@ -89,7 +91,7 @@ const HomePage = () => {
             </span>
           )}
 
-          {authCtx.updatedUser===true && (
+          {updatedUser===true && (
             <Button
               variant="outline-secondary"
               className={classes.button}
