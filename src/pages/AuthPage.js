@@ -1,20 +1,20 @@
 import { Button, Card } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import styles from "./AuthPage.module.css";
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import axios from "axios";
-import AuthContext from "../store/auth-context";
+import { useDispatch} from "react-redux";
+import { authActions } from "../store/auth";
 
 const signupUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_FB_KEY}`;
 const loginUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FB_KEY}`;
 
 const AuthPage = () => {
+  const dispatch = useDispatch();
   const history = useHistory();
   const emailRef = useRef();
   const passRef = useRef();
   const conPassRef = useRef();
-
-  const authCtx = useContext(AuthContext)
 
   const [isLogin, setIsLogin] = useState(true);
 
@@ -74,7 +74,8 @@ const AuthPage = () => {
 
       try {
         const { data } = await axios.post(loginUrl, reqBody);
-        authCtx.onLogin(data.idToken);
+        dispatch(authActions.login({token : data.idToken}));
+        localStorage.setItem('token', data.idToken);
         history.replace("/home");
       } catch (error) {
         if (

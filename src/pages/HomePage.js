@@ -1,12 +1,13 @@
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import classes from "./HomePage.module.css";
-import { useState, useContext, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Card, FormControl, Button } from "react-bootstrap";
-import AuthContext from "../store/auth-context";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import ExpenseLayout from "../components/ExpenseLayout";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "../store/auth";
 
 const updateProfileUrl = `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${process.env.REACT_APP_FB_KEY}`;
 const userDataUrl = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${process.env.REACT_APP_FB_KEY}`;
@@ -14,7 +15,8 @@ const verifyEmailUrl = `https://identitytoolkit.googleapis.com/v1/accounts:sendO
 
 const HomePage = () => {
   const history = useHistory();
-  const authCtx = useContext(AuthContext);
+  const dispatch = useDispatch()
+  const token = useSelector(state => state.auth.token);
   const [updateOpen, setUpdateOpen] = useState(false);
   const [fullname, setFullname] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
@@ -22,7 +24,7 @@ const HomePage = () => {
   const [updatedUser, setUpdatedUser] = useState(false);
 
   async function getUserInfo() {
-    const { data } = await axios.post(userDataUrl, { idToken: authCtx.token });
+    const { data } = await axios.post(userDataUrl, { idToken:  token});
     if (data.users[0].emailVerified) {
       setVerified(true);
     }else{
@@ -42,7 +44,7 @@ const HomePage = () => {
 
   async function sendUpdateApi() {
     const obj = {
-      idToken: authCtx.token,
+      idToken: token,
       displayName: fullname,
       photoUrl,
       returnSecureToken: true,
@@ -50,18 +52,18 @@ const HomePage = () => {
 
     await axios.post(updateProfileUrl, obj);
     setUpdatedUser(true)
-    console.log('=> ', updatedUser)
     setUpdateOpen(false)
   }
 
   async function onVerifyEmail() {
-    const reqObj = { requestType: "VERIFY_EMAIL", idToken: authCtx.token };
+    const reqObj = { requestType: "VERIFY_EMAIL", idToken: token };
     await axios.post(verifyEmailUrl, reqObj);
     setVerified(true)
   }
 
   function logoutHandler() {
-    authCtx.onLogout();
+    dispatch(authActions.logout());
+    localStorage.removeItem('token');
     history.replace("/auth");
   }
 

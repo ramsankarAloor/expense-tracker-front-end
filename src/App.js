@@ -1,17 +1,16 @@
 import AuthPage from "./pages/AuthPage";
 import { Switch, Route, Redirect } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import { useContext } from "react";
-import AuthContext from "./store/auth-context";
 import ForgotPassword from "./pages/ForgotPassword";
+import { useSelector } from "react-redux";
 
 function App() {
-  const authCtx = useContext(AuthContext)
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
   return (
     <>
       <Switch>
         <Route path="/" exact>
-          {authCtx.isLoggedIn ? <Redirect to='/home'></Redirect> : <Redirect to='/auth'></Redirect>}
+          {isLoggedIn ? <Redirect to='/home'></Redirect> : <Redirect to='/auth'></Redirect>}
         </Route>
         <Route path="/auth">
           <AuthPage />
@@ -20,7 +19,7 @@ function App() {
           <ForgotPassword />
         </Route>
         <Route path="/home">
-          {authCtx.isLoggedIn ? <HomePage /> : <Redirect to='/auth'></Redirect>}
+          {isLoggedIn ? <HomePage /> : <Redirect to='/auth'></Redirect>}
         </Route>
       </Switch>
     </>
