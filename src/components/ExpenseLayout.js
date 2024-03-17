@@ -3,11 +3,15 @@ import ExpenseTable from "./ExpenseTable";
 import classes from "./ExpenseLayout.module.css";
 import { useState } from "react";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { expensesAction } from "../store/expenses";
 
 const editUrlBase = `https://expense-tracker-front-en-3cc1e-default-rtdb.firebaseio.com/expenses/`;
 
 const ExpenseLayout = () => {
-  const [expenses, setExpenses] = useState({});
+  const expenses = useSelector(state => state.expenses.expenses);
+  const dispatch = useDispatch()
+  // const [expenses, setExpenses] = useState({});
   const [amount, setAmount] = useState("");
   const [desc, setDesc] = useState("");
   const [cat, setCat] = useState("food");
@@ -27,10 +31,7 @@ const ExpenseLayout = () => {
     const obj = { amount: +amount, description: desc, category: cat };
     try {
       await axios.put(`${editUrlBase}/${keyId}.json`, obj);
-
-      setExpenses((prevExpenses) => {
-        return { ...prevExpenses, [keyId]: obj };
-      });
+      dispatch(expensesAction.updateExpense({expenseId : keyId, obj: obj}))
 
       setAmount("");
       setDesc("");
@@ -45,8 +46,6 @@ const ExpenseLayout = () => {
     <div className={classes["for-container"]}>
       <div className={classes.half}>
         <ExpenseForm
-          expenses={expenses}
-          setExpenses={setExpenses}
           amount={amount}
           desc={desc}
           cat={cat}
@@ -60,8 +59,6 @@ const ExpenseLayout = () => {
       </div>
       <div className={classes.half}>
         <ExpenseTable
-          expenses={expenses}
-          setExpenses={setExpenses}
           populateForEdit={populateForEdit}
         />
       </div>

@@ -1,10 +1,14 @@
 import { Card, Container, Button } from "react-bootstrap";
 import classes from "./ExpenseForm.module.css";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { expensesAction } from "../store/expenses";
 
 const expensesUrl = `https://expense-tracker-front-en-3cc1e-default-rtdb.firebaseio.com/expenses.json`;
 
 const ExpenseForm = (props) => {
+  const dispatch = useDispatch()
+  // const expenses = useSelector(state => state.expenses.expenses)
   const amount = props.amount;
   const setAmount = props.setAmount;
   const desc = props.desc;
@@ -19,9 +23,7 @@ const ExpenseForm = (props) => {
     const obj = { amount: +amount, description: desc, category: cat };
     try {
       const { data } = await axios.post(expensesUrl, obj);
-      props.setExpenses((prevExpenses) => {
-        return { ...prevExpenses, [data.name]: obj };
-      });
+      dispatch(expensesAction.addExpense({expenseId : data.name, obj : obj}))
 
       setAmount("");
       setDesc("");
