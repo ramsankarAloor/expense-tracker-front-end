@@ -118,7 +118,7 @@ const ExpenseForm = (props) => {
               Edit Expense
             </Button>
             <Button
-              variant="outline-secondary"
+              variant={darkTheme ? "outline-light":"outline-secondary"}
               className={`${classes["cancel-button"]} ${classes["s-button"]}`}
               onClick={onCancelEdit}
             >
