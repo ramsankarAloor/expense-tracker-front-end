@@ -21,8 +21,8 @@ const HomePage = () => {
   const [updateOpen, setUpdateOpen] = useState(false);
   const [fullname, setFullname] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
-  const [verified, setVerified] = useState(false);
-  const [updatedUser, setUpdatedUser] = useState(false);
+  const [verified, setVerified] = useState();
+  const [updatedUser, setUpdatedUser] = useState();
 
   async function getUserInfo() {
     const { data } = await axios.post(userDataUrl, { idToken:  token});
