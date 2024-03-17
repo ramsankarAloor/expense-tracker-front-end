@@ -68,8 +68,8 @@ const HomePage = () => {
     setVerified(true);
   }
 
-  function toggleThemeHandler(){
-    dispatch(themeActions.toggleTheme())
+  function toggleThemeHandler() {
+    dispatch(themeActions.toggleTheme());
   }
 
   function logoutHandler() {
@@ -92,7 +92,9 @@ const HomePage = () => {
       >
         <Container>
           <div>
-            <Navbar.Brand className={darkTheme && `${classes['dark-text']}`}>Expense tracker</Navbar.Brand>
+            <Navbar.Brand className={darkTheme && "text-light"}>
+              Expense tracker
+            </Navbar.Brand>
             {total > 10000 && (
               <Button variant="warning" className={classes.button}>
                 Activate premium
@@ -122,7 +124,7 @@ const HomePage = () => {
 
           {updatedUser === true && (
             <Button
-              variant={darkTheme ? "outline-light": "outline-secondary"}
+              variant={darkTheme ? "outline-light" : "outline-secondary"}
               className={classes.button}
               onClick={() => setUpdateOpen(true)}
             >
@@ -130,11 +132,15 @@ const HomePage = () => {
             </Button>
           )}
           <div>
-            <Button variant={darkTheme ? "outline-light": "outline-secondary"} className={classes.button} onClick={toggleThemeHandler}>
+            <Button
+              variant={darkTheme ? "outline-light" : "outline-secondary"}
+              className={classes.button}
+              onClick={toggleThemeHandler}
+            >
               Toggle theme
             </Button>
             <Button
-              variant={darkTheme ? "outline-light": "outline-secondary"}
+              variant={darkTheme ? "outline-light" : "outline-secondary"}
               className={classes.button}
               onClick={logoutHandler}
             >
