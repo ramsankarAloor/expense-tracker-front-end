@@ -9,6 +9,7 @@ import BASE_URL from "../config";
 const ExpenseTable = (props) => {
   const dispatch = useDispatch();
   const expenses = useSelector((state) => state.expenses.expenses);
+  const total = useSelector((state) => state.expenses.totalAmount);
   const uid = useSelector((state) => state.auth.uid);
 
   const expensesUrl = `${BASE_URL}/${uid}/expenses.json`;
@@ -44,9 +45,9 @@ const ExpenseTable = (props) => {
     }
     return (
       <tr key={index}>
-        <td>{expenses[key].amount}</td>
         <td>{expenses[key].description}</td>
         <td>{expenses[key].category}</td>
+        <td>{expenses[key].amount}</td>
         <td>
           <Button variant="outline-primary" onClick={editExpenseHandler}>
             Edit
@@ -66,14 +67,23 @@ const ExpenseTable = (props) => {
       <table className="table">
         <thead>
           <tr>
-            <th scope="col">Amount</th>
             <th scope="col">Description</th>
             <th scope="col">Category</th>
+            <th scope="col">Amount</th>
             <th scope="col"></th>
             <th scope="col"></th>
           </tr>
         </thead>
-        <tbody>{expenseList}</tbody>
+        <tbody>
+          {expenseList}
+          <tr>
+            <th scope="col">Total</th>
+            <th scope="col"></th>
+            <th scope="col">{total}</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+          </tr>
+        </tbody>
       </table>
     </Container>
   );

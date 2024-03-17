@@ -7,7 +7,7 @@ import BASE_URL from "../config";
 
 const ExpenseForm = (props) => {
   const dispatch = useDispatch();
-  // const expenses = useSelector(state => state.expenses.expenses)
+  const total = useSelector(state => state.expenses.totalAmount)
   const uid = useSelector(state => state.auth.uid) 
   const amount = props.amount;
   const setAmount = props.setAmount;
@@ -26,7 +26,6 @@ const ExpenseForm = (props) => {
     try {
       const { data } = await axios.post(expensesUrl, obj);
       dispatch(expensesAction.addExpense({ expenseId: data.name, obj: obj }));
-
       setAmount("");
       setDesc("");
       setCat("food");

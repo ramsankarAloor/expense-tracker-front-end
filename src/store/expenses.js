@@ -8,15 +8,15 @@ const expensesSlice = createSlice({
     reducers : {
         addExpense(state, action){
             state.expenses = {...state.expenses, [action.payload.expenseId] : action.payload.obj}
+            state.totalAmount += action.payload.obj.amount
         },
         getExpenses(state, action) {
             state.expenses = action.payload.expenses;
-        },
-        updateExpense(state, action){
-            state.expenses = {...state.expenses, [action.payload.expenseId] : action.payload.obj}
+            state.totalAmount = Object.values(action.payload.expenses).reduce((acc, currentValue)=> acc+currentValue.amount, 0)
         },
         clearExpenses(state){
-            state.expenses = {}
+            state.expenses = {};
+            state.totalAmount = 0;
         }
     }
 })
