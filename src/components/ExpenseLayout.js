@@ -7,16 +7,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { expensesAction } from "../store/expenses";
 import BASE_URL from "../config";
 
-const editUrlBase = `${BASE_URL}/expenses/`;
-
 const ExpenseLayout = () => {
-  const expenses = useSelector(state => state.expenses.expenses);
-  const dispatch = useDispatch()
+  const expenses = useSelector((state) => state.expenses.expenses);
+  const uid = useSelector(state => state.auth.uid)
+  const dispatch = useDispatch();
   // const [expenses, setExpenses] = useState({});
   const [amount, setAmount] = useState("");
   const [desc, setDesc] = useState("");
   const [cat, setCat] = useState("food");
   const [keyId, setKeyId] = useState("");
+
+  const editUrlBase = `${BASE_URL}/${uid}/expenses/`;
 
   const [editing, setEditing] = useState(false);
 
@@ -32,7 +33,7 @@ const ExpenseLayout = () => {
     const obj = { amount: +amount, description: desc, category: cat };
     try {
       await axios.put(`${editUrlBase}/${keyId}.json`, obj);
-      dispatch(expensesAction.updateExpense({expenseId : keyId, obj: obj}))
+      dispatch(expensesAction.updateExpense({ expenseId: keyId, obj: obj }));
 
       setAmount("");
       setDesc("");
@@ -59,9 +60,7 @@ const ExpenseLayout = () => {
         />
       </div>
       <div className={classes.half}>
-        <ExpenseTable
-          populateForEdit={populateForEdit}
-        />
+        <ExpenseTable populateForEdit={populateForEdit} />
       </div>
     </div>
   );

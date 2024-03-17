@@ -5,17 +5,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { expensesAction } from "../store/expenses";
 import BASE_URL from "../config";
 
-const expensesUrl = `${BASE_URL}/expenses.json`;
-
 const ExpenseForm = (props) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   // const expenses = useSelector(state => state.expenses.expenses)
+  const uid = useSelector(state => state.auth.uid) 
   const amount = props.amount;
   const setAmount = props.setAmount;
   const desc = props.desc;
   const setDesc = props.setDesc;
   const cat = props.cat;
   const setCat = props.setCat;
+
+  const expensesUrl = `${BASE_URL}/${uid}/expenses.json`;
 
   async function onAddExpense() {
     if (!amount) {
@@ -24,7 +25,7 @@ const ExpenseForm = (props) => {
     const obj = { amount: +amount, description: desc, category: cat };
     try {
       const { data } = await axios.post(expensesUrl, obj);
-      dispatch(expensesAction.addExpense({expenseId : data.name, obj : obj}))
+      dispatch(expensesAction.addExpense({ expenseId: data.name, obj: obj }));
 
       setAmount("");
       setDesc("");

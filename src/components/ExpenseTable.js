@@ -6,12 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { expensesAction } from "../store/expenses";
 import BASE_URL from "../config";
 
-const expensesUrl = `${BASE_URL}/expenses.json`;
-const deleteBaseUrl = `${BASE_URL}/expenses/`;
-
 const ExpenseTable = (props) => {
   const dispatch = useDispatch();
-  const expenses = useSelector(state => state.expenses.expenses)
+  const expenses = useSelector((state) => state.expenses.expenses);
+  const uid = useSelector((state) => state.auth.uid);
+
+  const expensesUrl = `${BASE_URL}/${uid}/expenses.json`;
+  const deleteBaseUrl = `${BASE_URL}/${uid}/expenses/`;
 
   useEffect(() => {
     getExpenses();
@@ -20,7 +21,7 @@ const ExpenseTable = (props) => {
   async function getExpenses() {
     try {
       const { data } = await axios.get(expensesUrl);
-      dispatch(expensesAction.getExpenses({expenses : data}))
+      dispatch(expensesAction.getExpenses({ expenses: data || {} }));
     } catch (error) {
       console.error("error in get expenses ", error.message);
     }
@@ -35,11 +36,11 @@ const ExpenseTable = (props) => {
         console.error("Error in delete expense : ", error.message);
       }
       delete copyExp[key];
-      dispatch(expensesAction.getExpenses({expenses : copyExp}))
+      dispatch(expensesAction.getExpenses({ expenses: copyExp }));
     }
 
-    async function editExpenseHandler(){
-      props.populateForEdit(expenses[key], key)
+    async function editExpenseHandler() {
+      props.populateForEdit(expenses[key], key);
     }
     return (
       <tr key={index}>

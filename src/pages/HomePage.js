@@ -64,6 +64,7 @@ const HomePage = () => {
   function logoutHandler() {
     dispatch(authActions.logout());
     localStorage.removeItem('token');
+    localStorage.removeItem('uid');
     history.replace("/auth");
   }
 

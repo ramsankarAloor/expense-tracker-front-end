@@ -74,8 +74,10 @@ const AuthPage = () => {
 
       try {
         const { data } = await axios.post(loginUrl, reqBody);
-        dispatch(authActions.login({token : data.idToken}));
+        console.log(data);
+        dispatch(authActions.login({token : data.idToken, uid : data.localId}));
         localStorage.setItem('token', data.idToken);
+        localStorage.setItem('uid', data.localId);
         history.replace("/home");
       } catch (error) {
         if (
