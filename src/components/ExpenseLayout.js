@@ -5,8 +5,9 @@ import { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { expensesAction } from "../store/expenses";
+import BASE_URL from "../config";
 
-const editUrlBase = `https://expense-tracker-front-en-3cc1e-default-rtdb.firebaseio.com/expenses/`;
+const editUrlBase = `${BASE_URL}/expenses/`;
 
 const ExpenseLayout = () => {
   const expenses = useSelector(state => state.expenses.expenses);

@@ -4,9 +4,10 @@ import classes from "./ExpenseTable.module.css";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { expensesAction } from "../store/expenses";
+import BASE_URL from "../config";
 
-const expensesUrl = `https://expense-tracker-front-en-3cc1e-default-rtdb.firebaseio.com/expenses.json`;
-const deleteBaseUrl = `https://expense-tracker-front-en-3cc1e-default-rtdb.firebaseio.com/expenses/`;
+const expensesUrl = `${BASE_URL}/expenses.json`;
+const deleteBaseUrl = `${BASE_URL}/expenses/`;
 
 const ExpenseTable = (props) => {
   const dispatch = useDispatch();

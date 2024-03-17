@@ -3,8 +3,9 @@ import classes from "./ExpenseForm.module.css";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { expensesAction } from "../store/expenses";
+import BASE_URL from "../config";
 
-const expensesUrl = `https://expense-tracker-front-en-3cc1e-default-rtdb.firebaseio.com/expenses.json`;
+const expensesUrl = `${BASE_URL}/expenses.json`;
 
 const ExpenseForm = (props) => {
   const dispatch = useDispatch()
