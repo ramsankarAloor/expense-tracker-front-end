@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
 import ExpenseLayout from "../components/ExpenseLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../store/auth";
+import { expensesAction } from "../store/expenses";
 
 const updateProfileUrl = `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${process.env.REACT_APP_FB_KEY}`;
 const userDataUrl = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${process.env.REACT_APP_FB_KEY}`;
@@ -63,6 +64,7 @@ const HomePage = () => {
 
   function logoutHandler() {
     dispatch(authActions.logout());
+    dispatch(expensesAction.clearExpenses());
     localStorage.removeItem('token');
     localStorage.removeItem('uid');
     history.replace("/auth");

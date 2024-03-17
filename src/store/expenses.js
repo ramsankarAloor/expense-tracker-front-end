@@ -14,6 +14,9 @@ const expensesSlice = createSlice({
         },
         updateExpense(state, action){
             state.expenses = {...state.expenses, [action.payload.expenseId] : action.payload.obj}
+        },
+        clearExpenses(state){
+            state.expenses = {}
         }
     }
 })
