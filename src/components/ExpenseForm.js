@@ -7,7 +7,8 @@ import BASE_URL from "../config";
 
 const ExpenseForm = (props) => {
   const dispatch = useDispatch();
-  const uid = useSelector(state => state.auth.uid) 
+  const uid = useSelector((state) => state.auth.uid);
+  const darkTheme = useSelector((state) => state.theme.darkTheme);
   const amount = props.amount;
   const setAmount = props.setAmount;
   const desc = props.desc;
@@ -42,13 +43,19 @@ const ExpenseForm = (props) => {
 
   return (
     <Container className={classes["for-container"]}>
-      <Card className={classes["for-card"]}>
-        <h3>Add Expense</h3>
+      <Card
+        className={`${classes["for-card"]} ${
+          darkTheme && classes["for-card-dark"]
+        }`}
+      >
+       <h3 className={`${darkTheme ? classes['text-for-dark'] : ''}`}>Add Expense</h3>
         <div className="mb-3 input-group">
           <span className="input-group-text">&#8377;</span>
           <div className="form-floating">
             <input
-              className="form-control"
+              className={`form-control ${
+                darkTheme ? classes["for-input-dark"] : ""
+              }`}
               type="number"
               min="0"
               step="0.01"
@@ -58,19 +65,21 @@ const ExpenseForm = (props) => {
               onChange={(e) => setAmount(e.target.value)}
               value={amount}
             ></input>
-            <label htmlFor="amount">Amount</label>
+            <label htmlFor="amount" className={darkTheme ? classes['text-for-dark'] : ''} >Amount</label>
           </div>
         </div>
         <div className="form-floating mb-3">
           <input
-            className="form-control"
+            className={`form-control ${
+                darkTheme ? classes["for-input-dark"] : ""
+              }`}
             type="text"
             placeholder="desc"
             id="desc"
             onChange={(e) => setDesc(e.target.value)}
             value={desc}
           ></input>
-          <label htmlFor="desc">Description</label>
+          <label htmlFor="desc" className={darkTheme ? classes['text-for-dark'] : ''} >Description</label>
         </div>
         <div className="form-floating mb-3">
           <select
@@ -84,7 +93,7 @@ const ExpenseForm = (props) => {
             <option value="entertainment">Entertainment</option>
             <option value="other">Other</option>
           </select>
-          <label htmlFor="category">Category</label>
+          <label htmlFor="category" className={darkTheme ? classes['text-for-dark'] : ''} >Category</label>
         </div>
         {!props.editing ? (
           <Button className={classes["s-button"]} onClick={onAddExpense}>

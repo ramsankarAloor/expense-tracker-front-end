@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Button, Container } from "react-bootstrap";
+import { Button, Container, Table } from "react-bootstrap";
 import classes from "./ExpenseTable.module.css";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +11,7 @@ const ExpenseTable = (props) => {
   const expenses = useSelector((state) => state.expenses.expenses);
   const total = useSelector((state) => state.expenses.totalAmount);
   const uid = useSelector((state) => state.auth.uid);
+  const darkTheme = useSelector((state) => state.theme.darkTheme);
 
   const expensesUrl = `${BASE_URL}/${uid}/expenses.json`;
   const deleteBaseUrl = `${BASE_URL}/${uid}/expenses/`;
@@ -64,10 +65,12 @@ const ExpenseTable = (props) => {
 
   return (
     <Container className={classes["for-container"]}>
-      <table className="table">
+      <Table variant={darkTheme && "dark"}>
         <thead>
           <tr>
-            <th scope="col">Description</th>
+            <th scope="col" className={classes["for-dark"]}>
+              Description
+            </th>
             <th scope="col">Category</th>
             <th scope="col">Amount</th>
             <th scope="col"></th>
@@ -84,7 +87,7 @@ const ExpenseTable = (props) => {
             <th scope="col"></th>
           </tr>
         </tbody>
-      </table>
+      </Table>
     </Container>
   );
 };

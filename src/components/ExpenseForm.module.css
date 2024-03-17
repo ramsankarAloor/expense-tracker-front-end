@@ -8,6 +8,26 @@
   width: 80%;
   padding: 1.5rem;
 }
+.text-for-dark{
+  color: rgb(248, 249, 250);
+}
+.for-card-dark {
+  background: #212529;
+  border: 1px solid rgb(248, 249, 250);
+}
+.for-input-dark {
+  background: #212529;
+  border: 1px solid rgb(248, 249, 250);
+  color: rgb(248, 249, 250); /* Text color */
+}
+
+.for-input-dark::placeholder {
+  color: rgb(248, 249, 250); /* Placeholder color in dark mode */
+}
+
+.for-input-dark:focus {
+  outline: none; /* Remove the default focus outline */
+}
 .for-card h3 {
   text-align: center;
 }
@@ -16,6 +36,6 @@
   font-size: larger;
   font-weight: 500;
 }
-.cancel-button{
+.cancel-button {
   margin-top: 1rem;
 }

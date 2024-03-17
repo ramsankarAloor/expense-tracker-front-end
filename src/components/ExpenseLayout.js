@@ -9,6 +9,7 @@ import BASE_URL from "../config";
 
 const ExpenseLayout = () => {
   const uid = useSelector(state => state.auth.uid)
+  const darkTheme = useSelector(state => state.theme.darkTheme);
   const dispatch = useDispatch();
   const [amount, setAmount] = useState("");
   const [desc, setDesc] = useState("");
@@ -43,7 +44,7 @@ const ExpenseLayout = () => {
   }
 
   return (
-    <div className={classes["for-container"]}>
+    <div className={`${classes["for-container"]} ${darkTheme ? classes['for-dark-container'] : ''}`}>
       <div className={classes.half}>
         <ExpenseForm
           amount={amount}

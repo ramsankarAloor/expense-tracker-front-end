@@ -1,10 +1,14 @@
-.for-container{
-    display: flex;
-    height: 91%;
-    width: 100%;
+.for-container {
+  display: flex;
+  height: 91%;
+  width: 100%;
 }
-.half{
-    display: flex;
-    width: 50%;
-    height: 100%;
+.for-dark-container{
+    background-color: #212529;
+}
+
+.half {
+  display: flex;
+  width: 50%;
+  height: 100%;
 }
