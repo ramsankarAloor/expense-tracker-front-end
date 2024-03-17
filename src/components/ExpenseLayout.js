@@ -8,10 +8,8 @@ import { expensesAction } from "../store/expenses";
 import BASE_URL from "../config";
 
 const ExpenseLayout = () => {
-  const expenses = useSelector((state) => state.expenses.expenses);
   const uid = useSelector(state => state.auth.uid)
   const dispatch = useDispatch();
-  // const [expenses, setExpenses] = useState({});
   const [amount, setAmount] = useState("");
   const [desc, setDesc] = useState("");
   const [cat, setCat] = useState("food");

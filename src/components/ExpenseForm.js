@@ -7,7 +7,6 @@ import BASE_URL from "../config";
 
 const ExpenseForm = (props) => {
   const dispatch = useDispatch();
-  const total = useSelector(state => state.expenses.totalAmount)
   const uid = useSelector(state => state.auth.uid) 
   const amount = props.amount;
   const setAmount = props.setAmount;

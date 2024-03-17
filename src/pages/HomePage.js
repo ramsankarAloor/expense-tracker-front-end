@@ -16,8 +16,11 @@ const verifyEmailUrl = `https://identitytoolkit.googleapis.com/v1/accounts:sendO
 
 const HomePage = () => {
   const history = useHistory();
-  const dispatch = useDispatch()
-  const token = useSelector(state => state.auth.token);
+  const dispatch = useDispatch();
+
+  const token = useSelector((state) => state.auth.token);
+  const total = useSelector((state) => state.expenses.totalAmount);
+
   const [updateOpen, setUpdateOpen] = useState(false);
   const [fullname, setFullname] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
@@ -25,19 +28,20 @@ const HomePage = () => {
   const [updatedUser, setUpdatedUser] = useState();
 
   async function getUserInfo() {
-    const { data } = await axios.post(userDataUrl, { idToken:  token});
+    const { data } = await axios.post(userDataUrl, { idToken: token });
     if (data.users[0].emailVerified) {
       setVerified(true);
-    }else{
-      setVerified(false)
+    } else {
+      setVerified(false);
     }
     if (data.users[0].displayName) {
       setUpdatedUser(true);
       setFullname(data.users[0].displayName);
       setPhotoUrl(data.users[0].photoUrl);
-    }else{
-      setUpdatedUser(false)
-    }}
+    } else {
+      setUpdatedUser(false);
+    }
+  }
 
   useEffect(() => {
     getUserInfo();
@@ -52,21 +56,21 @@ const HomePage = () => {
     };
 
     await axios.post(updateProfileUrl, obj);
-    setUpdatedUser(true)
-    setUpdateOpen(false)
+    setUpdatedUser(true);
+    setUpdateOpen(false);
   }
 
   async function onVerifyEmail() {
     const reqObj = { requestType: "VERIFY_EMAIL", idToken: token };
     await axios.post(verifyEmailUrl, reqObj);
-    setVerified(true)
+    setVerified(true);
   }
 
   function logoutHandler() {
     dispatch(authActions.logout());
     dispatch(expensesAction.clearExpenses());
-    localStorage.removeItem('token');
-    localStorage.removeItem('uid');
+    localStorage.removeItem("token");
+    localStorage.removeItem("uid");
     history.replace("/auth");
   }
 
@@ -74,8 +78,15 @@ const HomePage = () => {
     <div className={classes.full}>
       <Navbar expand="lg" bg="light" className={classes["for-navbar"]}>
         <Container>
-          <Navbar.Brand>Expense tracker</Navbar.Brand>
-          {verified===false && (
+          <div>
+            <Navbar.Brand>Expense tracker</Navbar.Brand>
+            {total > 10000 && (
+              <Button variant="warning" className={classes.button}>
+                Activate premium
+              </Button>
+            )}
+          </div>
+          {verified === false && (
             <span>
               <button className={classes["blue-link"]} onClick={onVerifyEmail}>
                 Verify Email !!
@@ -83,7 +94,7 @@ const HomePage = () => {
             </span>
           )}
 
-          {updatedUser===false && (
+          {updatedUser === false && (
             <span className={classes.flex}>
               Your profile is incomplete.
               <button
@@ -96,7 +107,7 @@ const HomePage = () => {
             </span>
           )}
 
-          {updatedUser===true && (
+          {updatedUser === true && (
             <Button
               variant="outline-secondary"
               className={classes.button}
