@@ -4,7 +4,7 @@ import classes from "./ExpenseLayout.module.css";
 import { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { expensesAction } from "../store/expenses";
+import { expensesActions } from "../store/expenses";
 import BASE_URL from "../config";
 
 const ExpenseLayout = () => {
@@ -32,7 +32,7 @@ const ExpenseLayout = () => {
     const obj = { amount: +amount, description: desc, category: cat };
     try {
       await axios.put(`${editUrlBase}/${keyId}.json`, obj);
-      dispatch(expensesAction.updateExpense({ expenseId: keyId, obj: obj }));
+      dispatch(expensesActions.updateExpense({ expenseId: keyId, obj: obj }));
 
       setAmount("");
       setDesc("");

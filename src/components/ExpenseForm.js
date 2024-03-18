@@ -2,7 +2,7 @@ import { Card, Container, Button } from "react-bootstrap";
 import classes from "./ExpenseForm.module.css";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { expensesAction } from "../store/expenses";
+import { expensesActions } from "../store/expenses";
 import BASE_URL from "../config";
 
 const ExpenseForm = (props) => {
@@ -25,7 +25,7 @@ const ExpenseForm = (props) => {
     const obj = { amount: +amount, description: desc, category: cat };
     try {
       const { data } = await axios.post(expensesUrl, obj);
-      dispatch(expensesAction.addExpense({ expenseId: data.name, obj: obj }));
+      dispatch(expensesActions.addExpense({ expenseId: data.name, obj: obj }));
       setAmount("");
       setDesc("");
       setCat("food");

@@ -8,8 +8,9 @@ import { useHistory } from "react-router-dom";
 import ExpenseLayout from "../components/ExpenseLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../store/auth";
-import { expensesAction } from "../store/expenses";
+import { expensesActions } from "../store/expenses";
 import { themeActions } from "../store/theme";
+import { premiumActions } from "../store/premium";
 
 const updateProfileUrl = `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${process.env.REACT_APP_FB_KEY}`;
 const userDataUrl = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${process.env.REACT_APP_FB_KEY}`;
@@ -22,6 +23,9 @@ const HomePage = () => {
   const token = useSelector((state) => state.auth.token);
   const total = useSelector((state) => state.expenses.totalAmount);
   const darkTheme = useSelector((state) => state.theme.darkTheme);
+  const activatedPremium = useSelector(
+    (state) => state.premium.activatedPremium
+  );
 
   const [updateOpen, setUpdateOpen] = useState(false);
   const [fullname, setFullname] = useState("");
@@ -74,10 +78,15 @@ const HomePage = () => {
 
   function logoutHandler() {
     dispatch(authActions.logout());
-    dispatch(expensesAction.clearExpenses());
+    dispatch(expensesActions.clearExpenses());
     localStorage.removeItem("token");
     localStorage.removeItem("uid");
     history.replace("/auth");
+  }
+
+  function activatePremiumHandler() {
+    dispatch(premiumActions.activatePremium(true));
+    localStorage.setItem("activatedPremium", true);
   }
 
   return (
@@ -95,8 +104,12 @@ const HomePage = () => {
             <Navbar.Brand className={darkTheme && "text-light"}>
               Expense tracker
             </Navbar.Brand>
-            {total > 10000 && (
-              <Button variant="warning" className={classes.button}>
+            {total > 10000 && !activatedPremium && (
+              <Button
+                variant="warning"
+                className={classes.button}
+                onClick={activatePremiumHandler}
+              >
                 Activate premium
               </Button>
             )}
@@ -132,13 +145,16 @@ const HomePage = () => {
             </Button>
           )}
           <div>
-            <Button
-              variant={darkTheme ? "outline-light" : "outline-secondary"}
-              className={classes.button}
-              onClick={toggleThemeHandler}
-            >
-              Toggle theme
-            </Button>
+            {activatedPremium && (
+              <Button
+                variant={darkTheme ? "outline-light" : "outline-secondary"}
+                className={classes.button}
+                onClick={toggleThemeHandler}
+              >
+                Toggle theme
+              </Button>
+            )}
+
             <Button
               variant={darkTheme ? "outline-light" : "outline-secondary"}
               className={classes.button}

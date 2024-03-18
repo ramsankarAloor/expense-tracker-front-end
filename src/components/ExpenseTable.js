@@ -3,8 +3,9 @@ import { Button, Container, Table } from "react-bootstrap";
 import classes from "./ExpenseTable.module.css";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { expensesAction } from "../store/expenses";
+import { expensesActions } from "../store/expenses";
 import BASE_URL from "../config";
+import { premiumActions } from "../store/premium";
 
 const ExpenseTable = (props) => {
   const dispatch = useDispatch();
@@ -12,6 +13,9 @@ const ExpenseTable = (props) => {
   const total = useSelector((state) => state.expenses.totalAmount);
   const uid = useSelector((state) => state.auth.uid);
   const darkTheme = useSelector((state) => state.theme.darkTheme);
+  const activatedPremium = useSelector(
+    (state) => state.premium.activatedPremium
+  );
 
   const expensesUrl = `${BASE_URL}/${uid}/expenses.json`;
   const deleteBaseUrl = `${BASE_URL}/${uid}/expenses/`;
@@ -20,10 +24,20 @@ const ExpenseTable = (props) => {
     getExpenses();
   }, []);
 
+  useEffect(() => {
+    // This will run after the state has been updated
+    console.log('total =>', total);
+    if (total < 10000) {
+      dispatch(premiumActions.activatePremium(false));
+      localStorage.removeItem("activatedPremium");
+    }
+  }, [total]); // Only run this effect when 'total' changes
+  
+
   async function getExpenses() {
     try {
       const { data } = await axios.get(expensesUrl);
-      dispatch(expensesAction.getExpenses({ expenses: data || {} }));
+      dispatch(expensesActions.getExpenses({ expenses: data || {} }));
     } catch (error) {
       console.error("error in get expenses ", error.message);
     }
@@ -38,7 +52,7 @@ const ExpenseTable = (props) => {
         console.error("Error in delete expense : ", error.message);
       }
       delete copyExp[key];
-      dispatch(expensesAction.getExpenses({ expenses: copyExp }));
+      dispatch(expensesActions.getExpenses({ expenses: copyExp }));
     }
 
     async function editExpenseHandler() {
@@ -65,9 +79,9 @@ const ExpenseTable = (props) => {
 
   const handleDownload = () => {
     let csv = [];
-    const columns = Array.from(document.querySelectorAll("table thead th")).map(
-      (th) => th.innerText
-    ).slice(0,3);
+    const columns = Array.from(document.querySelectorAll("table thead th"))
+      .map((th) => th.innerText)
+      .slice(0, 3);
     csv.push(columns.join(","));
     const rows = document.querySelectorAll("table tbody tr");
     rows.forEach((row) => {
@@ -83,7 +97,7 @@ const ExpenseTable = (props) => {
       }
     });
     const csvString = csv.join("\n");
-    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
 
     const link = document.createElement("a");
@@ -119,12 +133,14 @@ const ExpenseTable = (props) => {
           </tr>
         </tbody>
       </Table>
-      <Button
-        variant={darkTheme ? "outline-light" : "outline-dark"}
-        onClick={handleDownload}
-      >
-        Download CSV
-      </Button>
+      {activatedPremium && (
+        <Button
+          variant={darkTheme ? "outline-light" : "outline-dark"}
+          onClick={handleDownload}
+        >
+          Download CSV
+        </Button>
+      )}
     </Container>
   );
 };
