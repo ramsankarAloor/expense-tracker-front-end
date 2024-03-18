@@ -43,17 +43,17 @@ const ExpenseForm = (props) => {
 
   return (
     <Container className={classes["for-container"]}>
-      <div className={`${classes['for-card']} ${darkTheme ? 'card text-bg-dark border-light' : 'card'}`}>
-        <h3 className={darkTheme ? classes["text-for-dark"] : ""}>
-          Add Expense
-        </h3>
+      <div
+        className={`${classes["for-card"]} ${
+          darkTheme ? "card text-bg-dark border-light" : "card"
+        }`}
+      >
+        <h3>Add Expense</h3>
         <div className="mb-3 input-group">
           <span className="input-group-text">&#8377;</span>
           <div className="form-floating">
             <input
-              className={`form-control ${
-                darkTheme ? classes["for-input-dark"] : ""
-              }`}
+              className={darkTheme ? "form-control bg-dark" : "form-control"}
               type="number"
               min="0"
               step="0.01"
@@ -63,35 +63,25 @@ const ExpenseForm = (props) => {
               onChange={(e) => setAmount(e.target.value)}
               value={amount}
             ></input>
-            <label
-              htmlFor="amount"
-              className={darkTheme ? classes["text-for-dark"] : ""}
-            >
-              Amount
-            </label>
+            <label htmlFor="amount">Amount</label>
           </div>
         </div>
         <div className="form-floating mb-3">
           <input
-            className={`form-control ${
-              darkTheme ? classes["for-input-dark"] : ""
-            }`}
+            className={darkTheme ? "form-control bg-dark" : "form-control"}
             type="text"
             placeholder="desc"
             id="desc"
             onChange={(e) => setDesc(e.target.value)}
             value={desc}
           ></input>
-          <label
-            htmlFor="desc"
-            className={darkTheme ? classes["text-for-dark"] : ""}
-          >
-            Description
-          </label>
+          <label htmlFor="desc">Description</label>
         </div>
         <div className="form-floating mb-3">
           <select
-            className="form-select"
+            className={
+              darkTheme ? "form-select bg-dark text-bg-dark" : "form-select"
+            }
             id="category"
             onChange={(e) => setCat(e.target.value)}
             value={cat}
@@ -101,12 +91,7 @@ const ExpenseForm = (props) => {
             <option value="entertainment">Entertainment</option>
             <option value="other">Other</option>
           </select>
-          <label
-            htmlFor="category"
-            className={darkTheme ? classes["text-for-dark"] : ""}
-          >
-            Category
-          </label>
+          <label htmlFor="category">Category</label>
         </div>
         {!props.editing ? (
           <Button className={classes["s-button"]} onClick={onAddExpense}>
@@ -118,7 +103,7 @@ const ExpenseForm = (props) => {
               Edit Expense
             </Button>
             <Button
-              variant={darkTheme ? "outline-light":"outline-secondary"}
+              variant={darkTheme ? "outline-light" : "outline-secondary"}
               className={`${classes["cancel-button"]} ${classes["s-button"]}`}
               onClick={onCancelEdit}
             >
