@@ -63,6 +63,37 @@ const ExpenseTable = (props) => {
     );
   });
 
+  const handleDownload = () => {
+    let csv = [];
+    const columns = Array.from(document.querySelectorAll("table thead th")).map(
+      (th) => th.innerText
+    ).slice(0,3);
+    csv.push(columns.join(","));
+    const rows = document.querySelectorAll("table tbody tr");
+    rows.forEach((row) => {
+      const rowData = [];
+      row.querySelectorAll("td").forEach((cell) => {
+        if (cell.innerText === "Delete" || cell.innerText === "Edit") {
+        } else {
+          rowData.push(cell.innerText);
+        }
+      });
+      if (rowData.length !== 0) {
+        csv.push(rowData.join(","));
+      }
+    });
+    const csvString = csv.join("\n");
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "expenses.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <Container className={classes["for-container"]}>
       <Table variant={darkTheme && "dark"}>
@@ -88,6 +119,12 @@ const ExpenseTable = (props) => {
           </tr>
         </tbody>
       </Table>
+      <Button
+        variant={darkTheme ? "outline-light" : "outline-dark"}
+        onClick={handleDownload}
+      >
+        Download CSV
+      </Button>
     </Container>
   );
 };
